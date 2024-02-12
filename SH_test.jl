@@ -20,3 +20,5 @@ f2 = T * F
 
 f2
 f
+
+sYlm_values(0., 0., 10, 0)
