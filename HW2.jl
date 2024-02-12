@@ -1,8 +1,10 @@
 using Plots
 using SphericalFunctions
 
-dt = 0.025
-lmax = 10
+
+Tsteps = 1000
+dt = 10/Tsteps
+lmax = 4
 
 llist = [l*(l+1) for l in 0:lmax for _ in 1:2*l + 1]
 
@@ -51,8 +53,8 @@ phis   = LinRange(0, 2*pi, N)
 
 function f(pix)::ComplexF64
     theta, phi = pix
-    sigma = 1
-    return 4 * exp(-(pi-theta)^2/sigma^2)/sqrt(sigma^2 * 2 * pi)+2
+    sigma = 0.35
+    return 3 * exp(-(pi-theta)^2/sigma^2)/sqrt(sigma^2 * 2 * pi)+2
 end
 
 function g(pix)::ComplexF64
@@ -83,7 +85,7 @@ surface(
 )
 
 
-@gif for i=1:400
+@gif for i=1:Tsteps
     flm_next, glm_next = evolve(Flm[end], Glm[end])
     X, Y, Z = sphere_wrap(flm_next, thetas, phis, N)
     println("Completed frames ", i)
@@ -91,7 +93,7 @@ surface(
         X, Y, Z,
         showaxis = false,
         grid = false,
-        camera=(0,45),
+        camera=(0,0),
         #marker=(:circle,4),
         legend =:none, 
     )
@@ -99,5 +101,6 @@ surface(
     push!(Flm, flm_next)
     push!(Glm, glm_next)
 end every 2
+
 
 
